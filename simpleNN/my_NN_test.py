@@ -3,6 +3,9 @@ import scipy.special
 import matplotlib.pyplot
 import dill
 import os
+import sys
+
+print (sys.version)
 
 print("Loading model...")
 nn = dill.load(open('model.pkl', 'rb'))

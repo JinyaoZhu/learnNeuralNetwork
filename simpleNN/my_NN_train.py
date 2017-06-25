@@ -19,20 +19,19 @@ class neuralNetwork:
         self.onodes = outputnodes
         self.num_of_hidden_layers = num_of_hidden_layers
         self.lr = learningrate
-        
+        self.activation_function = lambda x:scipy.special.expit(x)
+        #self.activation_function = lambda x:(numpy.tanh(x)*0.5+0.5)
+
         self.wh = []
         
+        #initialize the weigh
         for n in range(0,self.num_of_hidden_layers+1):
             if n==0:
-                self.wh.append((numpy.random.rand(self.hnodes,self.inodes)-0.5))
+                self.wh.append((numpy.random.rand(self.hnodes,self.inodes)-0.5)*0.8)
             elif n == self.num_of_hidden_layers:
-                self.wh.append((numpy.random.rand(self.onodes,self.hnodes)-0.5))
+                self.wh.append((numpy.random.rand(self.onodes,self.hnodes)-0.5)*0.8)
             else:
-                self.wh.append((numpy.random.rand(self.hnodes,self.hnodes)-0.5))
-            
-        
-        self.activation_function = lambda x:scipy.special.expit(x)
-    
+                self.wh.append((numpy.random.rand(self.hnodes,self.hnodes)-0.5)*0.8)
 
     def train(self,inputs_list,targets_list):
         
@@ -43,6 +42,7 @@ class neuralNetwork:
         layers_outputs = []
         layers_outputs.append(inputs)
         
+        #forward
         for n in range(0,self.num_of_hidden_layers+1):
             hidden_inputs = numpy.dot(self.wh[n],hidden_inputs)
             hidden_outputs = self.activation_function(hidden_inputs)
@@ -52,9 +52,9 @@ class neuralNetwork:
         hidden_errors = targets - layers_outputs[self.num_of_hidden_layers+1]
 
         self.error = hidden_errors;
-        
+        #backward
         for n in range(self.num_of_hidden_layers,-1,-1):
-            self.wh[n] += self.lr*numpy.dot(hidden_errors*layers_outputs[n+1]*(1.0-layers_outputs[n+1]),numpy.transpose(layers_outputs[n]))
+            self.wh[n] += self.lr*numpy.dot(hidden_errors*layers_outputs[n+1]*(1.0-layers_outputs[n+1]),layers_outputs[n].T)
             hidden_errors = numpy.dot(self.wh[n].T,hidden_errors)
 
         #print(output_errors)
@@ -77,10 +77,10 @@ class neuralNetwork:
 input_nodes = 784
 output_nodes = 10
 
-hidden_nodes = 800
-num_hidden_layers = 1
-learning_rate = 0.02
-epoch = 1
+hidden_nodes = 50
+num_hidden_layers = 2
+learning_rate = 0.01
+epoch = 5
 
 nn = neuralNetwork(input_nodes,hidden_nodes,output_nodes,num_hidden_layers,learning_rate)
 
@@ -109,7 +109,7 @@ for n in range(1,epoch+1):
         targets[int(all_values[0])]=0.99
         nn.train(inputs,targets)
         if plot_cnt%1000 == 0:
-            plot_loss.append(numpy.absolute(nn.error).sum())
+            plot_loss.append((nn.error**2).sum())
             plt.xlim(0,len(plot_loss))
             plt.ylim(min(plot_loss)-0.1,max(plot_loss)+0.1)
             plt.plot(plot_loss,color='r')
