@@ -7,7 +7,7 @@ import sys
 import datetime
 
 import warnings
-warnings.filterwarnings("ignore",".*GUI is implemented.*")
+warnings.filterwarnings("ignore", ".*GUI is implemented.*")
 
 print (sys.version)
 
@@ -27,11 +27,11 @@ class neuralNetwork:
         #initialize the weigh
         for n in range(0,self.num_of_hidden_layers+1):
             if n==0:
-                self.wh.append((numpy.random.rand(self.hnodes,self.inodes)-0.5)*0.8)
+                self.wh.append((numpy.random.rand(self.hnodes, self.inodes)-0.5)*0.8)
             elif n == self.num_of_hidden_layers:
-                self.wh.append((numpy.random.rand(self.onodes,self.hnodes)-0.5)*0.8)
+                self.wh.append((numpy.random.rand(self.onodes, self.hnodes)-0.5)*0.8)
             else:
-                self.wh.append((numpy.random.rand(self.hnodes,self.hnodes)-0.5)*0.8)
+                self.wh.append((numpy.random.rand(self.hnodes, self.hnodes)-0.5)*0.8)
 
     def train(self,inputs_list,targets_list):
         
@@ -61,11 +61,11 @@ class neuralNetwork:
         #return output_errors
     
     def query(self,inputs_list):
-        inputs = numpy.array(inputs_list,ndmin=2).T
+        inputs = numpy.array(inputs_list, ndmin=2).T
         hidden_inputs = inputs
         
         for n in range(0,self.num_of_hidden_layers+1):
-            hidden_inputs = numpy.dot(self.wh[n],hidden_inputs)
+            hidden_inputs = numpy.dot(self.wh[n], hidden_inputs)
             hidden_outputs = self.activation_function(hidden_inputs)
             hidden_inputs = hidden_outputs
             
@@ -119,7 +119,7 @@ for n in range(1,epoch+1):
 
     print("Final Loss:",plot_loss[-1])
 
-print("time cost:",datetime.timedelta(seconds=(time.clock()-t0)))
+print("time cost:", datetime.timedelta(seconds=(time.clock()-t0)))
 print("Trainning finish!")
 print("Saving model...")
 dill.dump(nn, open('model.pkl', 'wb'))

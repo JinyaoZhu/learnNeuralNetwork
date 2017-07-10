@@ -1,5 +1,9 @@
-*.vscode
-**/build
-**/bin
+.idea/
+.vscode/
+build/
+bin/
+log/
 *.kdev*
 *.pkl
+*.csv
+*.pickle

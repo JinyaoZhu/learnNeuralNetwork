@@ -2,6 +2,10 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
+from matplotlib import style
+
+style.use('ggplot')
+
 import os
 
 #ignore tensorflow warnings
@@ -38,8 +42,7 @@ x_plot = np.arange(x_train[0]-1,x_train[-1]+1,0.1)
 y_plot = curr_W[0]*x_plot + curr_b[0]
 plt.plot(x_plot,y_plot,color="b")
 plt.scatter(x_train,y_train,color="r")
-plt.grid()
 plt.xlabel("x")
 plt.ylabel("y")
-plt.legend(['model','data'])
+plt.legend(['model','data'],loc=4)
 plt.show()
