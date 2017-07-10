@@ -8,12 +8,12 @@ import sys
 print (sys.version)
 
 print("Loading model...")
-nn = dill.load(open('model.pkl', 'rb'))
+with open('model.pkl', 'rb') as model_file:
+    nn = dill.load(model_file)
 
 print("Loading test data...")
-test_data_file = open("/home/jinyao/Downloads/mnist_test.csv", 'r')
-test_data_list = test_data_file.readlines()
-test_data_file.close()
+with open("/home/jinyao/NN_dataset/mnist_csv/mnist_test.csv", 'r') as test_data_file:
+    test_data_list = test_data_file.readlines()
 
 print("Testing model...")
 scorecard = []
@@ -31,6 +31,7 @@ for record in test_data_list:
         scorecard.append(0)
 
 scorecard_array = numpy.asarray(scorecard)
+accuracy = scorecard_array.mean()
 print("=============================================")
 print("Model parameters:")
 print("---------------------------------------------")
@@ -38,5 +39,5 @@ print("hidden nodes:", nn.hnodes)
 print("hidden layers:", nn.num_of_hidden_layers)
 print("learning rate:", nn.lr)
 print("=============================================")
-print("performance = ", scorecard_array.sum()/scorecard_array.size)
+print("accuracy = {}%". format(accuracy*100.0))
 print("=============================================")
